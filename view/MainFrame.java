@@ -1,8 +1,8 @@
 package view;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -11,16 +11,16 @@ import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableRowSorter;
 
 import controller.ClearListener;
@@ -38,6 +38,7 @@ public class MainFrame extends JFrame {
 	private JTextField maxPort;
 	private Thread thread;
 	private boolean isThreadStarted = false;
+	private DefaultTableCellRenderer dtcr;
 
 	public MainFrame() {
 		super(FrameConstants.FRAME_TITLE);
@@ -60,9 +61,12 @@ public class MainFrame extends JFrame {
 		JPanel centerPanel = new JPanel(new BorderLayout(5, 5));
 		JPanel centerPanelInner = new JPanel(new BorderLayout(5, 5));
 
-		final DefaultTableModel model = new DefaultTableModel(FrameConstants.TABLE_HEADER, 0 );
+		final DefaultTableModel model = new DefaultTableModel(FrameConstants.TABLE_HEADER, 0);
 		
 		this.table = new JTable(model);
+		
+		this.dtcr = new DefaultTableCellRenderer();
+		dtcr.setHorizontalAlignment(JLabel.CENTER);
 		
 		TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<DefaultTableModel>(model); 
 		
@@ -82,6 +86,10 @@ public class MainFrame extends JFrame {
 		
 		table.setRowSorter(sorter);
 		table.setEnabled(false);
+		table.setFont(new Font("Arial", Font.PLAIN, 16));
+		table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 16));
+		table.setRowHeight(25);
+		table.getTableHeader().setDefaultRenderer(this.dtcr);
 		
 		List<RowSorter.SortKey> sortKeys = new ArrayList<RowSorter.SortKey>();
 		
@@ -185,6 +193,13 @@ public class MainFrame extends JFrame {
 		
 		return panel;
 	}
+	
+	public void clearTable() {
+		DefaultTableModel model = (DefaultTableModel) this.table.getModel();
+		
+		while(model.getRowCount() > 0)
+			model.removeRow(0);
+	}
 
 	public JTable getTable() {
 		return table;
@@ -233,13 +248,13 @@ public class MainFrame extends JFrame {
 	public void setThreadStarted(boolean isThreadStarted) {
 		this.isThreadStarted = isThreadStarted;
 	}
-
-	public void clearTable() {
-		DefaultTableModel model = (DefaultTableModel) this.table.getModel();
-		
-		while(model.getRowCount() > 0)
-			model.removeRow(0);
+	
+	public DefaultTableCellRenderer getDtcr() {
+		return dtcr;
 	}
 
+	public void setDtcr(DefaultTableCellRenderer dtcr) {
+		this.dtcr = dtcr;
+	}
 
 }

@@ -75,8 +75,10 @@ public class MyRunnable implements Runnable {
 
 						for (int i = minPort; i <= maxPort; i++) {
 							model.addRow(new Object[] { ip, i, hc.checkOpen(i), new Timestamp(new Date().getTime()) });
+							table.setDefaultRenderer(table.getColumnClass(model.getColumnCount() - 1),  frame.getDtcr());
 						}	
 					} else {
+						System.out.println("Here");
 						JOptionPane.showMessageDialog(frame, FrameConstants.TEXT_HOST_UNREACHABLE);
 					}
 				} catch (UnknownHostException e1) {
