@@ -89,7 +89,9 @@ public class MainFrame extends JFrame {
 		table.setFont(new Font("Arial", Font.PLAIN, 16));
 		table.getTableHeader().setFont(new Font("Arial", Font.BOLD, 16));
 		table.setRowHeight(25);
-		table.getTableHeader().setDefaultRenderer(this.dtcr);
+		
+		JLabel headerLabel = (JLabel) table.getTableHeader().getDefaultRenderer();
+		headerLabel.setHorizontalAlignment(JLabel.CENTER);
 		
 		List<RowSorter.SortKey> sortKeys = new ArrayList<RowSorter.SortKey>();
 		
