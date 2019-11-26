@@ -1,15 +1,20 @@
 package controller;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.table.DefaultTableModel;
 
 import ressource.FrameConstants;
@@ -32,6 +37,7 @@ public class MyRunnable implements Runnable {
 		JTable table = frame.getTable();
 		DefaultTableModel model = (DefaultTableModel) table.getModel();
 		frame.clearTable();
+		ArrayList<String> open = new ArrayList<String>();
 
 		String ip = "";
 		int minPort = 0;
@@ -74,8 +80,12 @@ public class MyRunnable implements Runnable {
 						HostCheck hc = new HostCheck(ip);
 
 						for (int i = minPort; i <= maxPort; i++) {
-							model.addRow(new Object[] { ip, i, hc.checkOpen(i), new Timestamp(new Date().getTime()) });
+							boolean isOpen = hc.checkOpen(i);
+							model.addRow(new Object[] { ip, i, isOpen, new Timestamp(new Date().getTime()) });
 							table.setDefaultRenderer(table.getColumnClass(model.getColumnCount() - 1),  frame.getDtcr());
+							
+							if(isOpen)
+								open.add(String.format("%s:%d", ip, i));
 						}	
 					} else {
 						System.out.println("Here");
@@ -87,10 +97,11 @@ public class MyRunnable implements Runnable {
 					JOptionPane.showMessageDialog(frame, FrameConstants.TEXT_HOST_UNREACHABLE);
 				}
 			}
-
+			
 			exit = true;
 		}
-
+		
+		frame.showEndMessage(open, ip);
 		frame.setThreadStarted(false);
 	}
 
