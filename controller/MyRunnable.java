@@ -62,6 +62,11 @@ public class MyRunnable implements Runnable {
 					JOptionPane.showMessageDialog(frame, FrameConstants.TEXT_INVALID_IP);
 					isValid = false;
 				}
+				
+				if(maxPort < minPort) {
+					JOptionPane.showMessageDialog(frame, FrameConstants.TEXT_INVALID);
+					isValid = false;
+				}
 
 				if (minPort < 1) {
 					JOptionPane.showMessageDialog(frame, FrameConstants.TEXT_INVALID_MIN_PORT);
@@ -87,6 +92,8 @@ public class MyRunnable implements Runnable {
 							if(isOpen)
 								open.add(String.format("%s:%d", ip, i));
 						}	
+						
+						frame.showEndMessage(open, ip);
 					} else {
 						System.out.println("Here");
 						JOptionPane.showMessageDialog(frame, FrameConstants.TEXT_HOST_UNREACHABLE);
@@ -101,7 +108,6 @@ public class MyRunnable implements Runnable {
 			exit = true;
 		}
 		
-		frame.showEndMessage(open, ip);
 		frame.setThreadStarted(false);
 	}
 

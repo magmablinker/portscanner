@@ -4,16 +4,26 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
+import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.StringSelection;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -206,17 +216,6 @@ public class MainFrame extends JFrame {
 		JTextArea text = new JTextArea(5, 5);
 		JScrollPane scroll = new JScrollPane(text);
 
-		String textSuccess = String.format("Found %d open ports for host %s %s", open.size(), ip,
-				System.getProperty("line.separator"));
-		
-		text.append(textSuccess);
-		
-		for (int i = 0; i < textSuccess.length() - 3; i++) {
-			text.append("=");
-		}
-		
-		text.append(System.getProperty("line.separator"));
-		
 		for (int i = 0; i < open.size(); i++) {
 			text.append(open.get(i) + System.getProperty("line.separator"));
 		}
@@ -226,11 +225,72 @@ public class MainFrame extends JFrame {
 		JPanel bPanel = new JPanel(new GridLayout(1, 2, 5, 5));
 
 		JButton bSave = new JButton(FrameConstants.BTN_SAVE);
+		bSave.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(text.getText().length() > 0) {
+					JFileChooser saveAs = new JFileChooser();
+					saveAs.setApproveButtonText(FrameConstants.BTN_SAVE);
+					int actionDialog = saveAs.showOpenDialog(dialog);
+					
+					if(actionDialog != JFileChooser.APPROVE_OPTION) {
+						return;
+					}
+					
+					File fileName = new File(saveAs.getSelectedFile() + ".txt");
+					
+					BufferedWriter outFile = null;
+					
+					try {
+						outFile = new BufferedWriter(new FileWriter(fileName));
+						text.write(outFile);
+						JOptionPane.showMessageDialog(dialog, FrameConstants.TEXT_FILE_SAVED);
+					} catch (Exception ex) {
+						JOptionPane.showMessageDialog(dialog, FrameConstants.TEXT_FILE_SAVE_FAILED);
+					} finally {
+						try {
+							if(outFile !=  null) {
+								outFile.close();
+							}
+						} catch (Exception exx) {
+							JOptionPane.showMessageDialog(dialog, FrameConstants.TEXT_FILE_SAVE_FAILED);
+						}
+					}	
+				} else {
+					JOptionPane.showMessageDialog(dialog, FrameConstants.TEXT_NOTHING_TO_SAVE);
+				}
+			}
+		});
+		
 		JButton bCopy = new JButton(FrameConstants.BTN_COPY);
+		bCopy.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String myText = text.getText();
+				
+				if(myText.length() > 0) {
+					StringSelection stringSelection = new StringSelection(myText);
+					Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+					clipboard.setContents(stringSelection, null);
+					JOptionPane.showMessageDialog(dialog, FrameConstants.TEXT_COPIED_TO_CLIPBOARD);
+				} else {
+					JOptionPane.showMessageDialog(dialog, FrameConstants.TEXT_NOTHING_TO_SAVE);
+				}
+				
+			}
+		});
 		
 		bPanel.add(bSave);
 		bPanel.add(bCopy);
+		
+		String textSuccess = String.format("Found %d open ports for host %s", open.size(), ip);
 
+		JLabel innerText = new JLabel(textSuccess);
+		innerText.setFont(new Font("Arial", Font.PLAIN, 16));
+		
+		innerPanel.add(innerText, BorderLayout.NORTH);
 		innerPanel.add(bPanel, BorderLayout.SOUTH);
 		innerPanel.add(scroll, BorderLayout.CENTER);
 
