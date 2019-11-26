@@ -20,6 +20,7 @@ import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
+import controller.ClearListener;
 import controller.StartListener;
 import controller.StopListener;
 import ressource.FrameConstants;

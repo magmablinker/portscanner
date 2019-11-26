@@ -1,4 +1,4 @@
-package view;
+package controller;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -8,6 +8,7 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 import util.ReferenceFinder;
+import view.MainFrame;
 
 public class ClearListener implements ActionListener {
 
