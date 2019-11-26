@@ -22,7 +22,7 @@ public class HostCheck {
 		InetSocketAddress address = new InetSocketAddress(this.ip, port);
 		
 		try {
-			socket.connect(address, 1000);
+			socket.connect(address, 500);
 			
 			if(socket.isConnected())
 				isOpen = true;

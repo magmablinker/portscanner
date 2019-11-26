@@ -20,6 +20,7 @@ public class Main {
 		mainFrame.setMinimumSize(new Dimension(400, 200));
 		mainFrame.setLocationRelativeTo(null);
 		mainFrame.setVisible(true);
+		mainFrame.requestFocusInWindow();
 	}
 
 }

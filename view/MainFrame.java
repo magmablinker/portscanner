@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.event.FocusEvent;
@@ -10,6 +11,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -18,6 +20,7 @@ import javax.swing.JTextField;
 import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableRowSorter;
 
 import controller.ClearListener;
@@ -63,7 +66,7 @@ public class MainFrame extends JFrame {
 		
 		TableRowSorter<DefaultTableModel> sorter = new TableRowSorter<DefaultTableModel>(model); 
 		
-		// Since that shit is bugged out ayy
+		// Since that shit is bugged out
 		sorter.setComparator(1, new Comparator<Integer>() {
 
 			@Override
