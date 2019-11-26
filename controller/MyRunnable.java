@@ -2,6 +2,9 @@ package controller;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -66,10 +69,20 @@ public class MyRunnable implements Runnable {
 			}
 				
 			if (isValid) {
-				HostCheck hc = new HostCheck(ip);
+				try {
+					if(InetAddress.getByName(ip).isReachable(500)) {
+						HostCheck hc = new HostCheck(ip);
 
-				for (int i = minPort; i <= maxPort; i++) {
-					model.addRow(new Object[] { ip, i, hc.checkOpen(i), new Timestamp(new Date().getTime()) });
+						for (int i = minPort; i <= maxPort; i++) {
+							model.addRow(new Object[] { ip, i, hc.checkOpen(i), new Timestamp(new Date().getTime()) });
+						}	
+					} else {
+						JOptionPane.showMessageDialog(frame, FrameConstants.TEXT_HOST_UNREACHABLE);
+					}
+				} catch (UnknownHostException e1) {
+					JOptionPane.showMessageDialog(frame, FrameConstants.TEXT_HOST_UNREACHABLE);
+				} catch (IOException e1) {
+					JOptionPane.showMessageDialog(frame, FrameConstants.TEXT_HOST_UNREACHABLE);
 				}
 			}
 
