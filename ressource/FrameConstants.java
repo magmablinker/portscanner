@@ -13,6 +13,6 @@ public class FrameConstants {
 	public static String TEXT_INVALID_IP = "Invalid IP Address!";
 	public static String TEXT_INVALID_MIN_PORT = "Invalid Min Port!";
 	public static String TEXT_INVALID_MAX_PORT = "Invalid Max Port!";
-	public static final Object TEXT_HOST_UNREACHABLE = "The Target Host Is Unreachable!";
+	public static String TEXT_HOST_UNREACHABLE = "The Target Host Is Unreachable!";
 	
 }
