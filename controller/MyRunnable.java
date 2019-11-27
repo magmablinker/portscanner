@@ -95,7 +95,6 @@ public class MyRunnable implements Runnable {
 						
 						frame.showEndMessage(open, ip);
 					} else {
-						System.out.println("Here");
 						JOptionPane.showMessageDialog(frame, FrameConstants.TEXT_HOST_UNREACHABLE);
 					}
 				} catch (UnknownHostException e1) {
